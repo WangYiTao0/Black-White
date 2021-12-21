@@ -1,18 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 
 public class Card : MonoBehaviour
-{
-    public SpriteRenderer _spriteRenderer;
-    public TextMeshPro _numberText;
+{ 
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField]  private TextMeshPro _numberText;
 
+    [SerializeField]
+    private MMFeedbacks _mmFeedback;
 
     private void OnMouseEnter()
     {
-        
+        Debug.Log("OnMouseEnter");
+        _mmFeedback.PlayFeedbacks();
     }
 
     private void OnMouseDown()
