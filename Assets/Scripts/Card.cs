@@ -10,6 +10,21 @@ public class Card : MonoBehaviour
     public TextMeshPro _numberText;
 
 
+    private void OnMouseEnter()
+    {
+        
+    }
+
+    private void OnMouseDown()
+    {
+        
+    }
+
+    private void OnMouseExit()
+    {
+        
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
