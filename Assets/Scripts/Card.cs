@@ -1,47 +1,95 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
-using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Card : MonoBehaviour
-{ 
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField]  private TextMeshPro _numberText;
-
-    [SerializeField]
-    private MMFeedbacks _mmFeedback;
-
-    private void OnMouseEnter()
+namespace BlackAndWhite
+{
+    public class Card : MonoBehaviour
     {
-        Debug.Log("OnMouseEnter");
-        _mmFeedback.PlayFeedbacks();
-    }
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private TextMeshPro _numberText;
 
-    private void OnMouseDown()
-    {
+        [FormerlySerializedAs("CanbeSelectted")] public bool Selectable = true;
         
-    }
-
-    private void OnMouseExit()
-    {
+        public int Number;
+        public Action<Card> OnCardSelect;
+        private PlayerType _playerType = PlayerType.Human;
         
-    }
+        public Vector3 CurrentCardPosition;
+        
+        public void InitCard(int num)
+        {
+            Number = num;
+            _numberText.SetText(num.ToString());
+            if (num % 2 == 0)
+            {
+                _spriteRenderer.color = Color.white;
+                _numberText.color = Color.black;
+            }
+            else if (num % 2 == 1)
+            {
+                _spriteRenderer.color = Color.black;
+                _numberText.color = Color.white;
+            }
+        }
+        
+        public void SetupCardPosition()
+        {
+            CurrentCardPosition = transform.position;
+        }
+
+        public void SetupPlayerType(PlayerType playerType)
+        {
+            _playerType = playerType;
+            if (playerType == PlayerType.CPU)
+            {
+                _spriteRenderer.sortingOrder += 2;
+            }
+        }
+
+        private void OnMouseEnter()
+        {
+            if (_playerType == PlayerType.CPU)
+                return; ;    
+            transform.localScale = Vector3.one * 1.2f;
+        }
+
+        private void OnMouseDown()
+        {
+            if (_playerType == PlayerType.CPU)
+                return;
+            if (!Selectable)
+                return;    
+            OnCardSelect?.Invoke(this);
+        }
+
+        private void OnMouseExit()
+        {
+            if (_playerType == PlayerType.CPU)
+                return;
+            transform.localScale = Vector3.one;
+        }
 
 #if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (_spriteRenderer == null)
+        private void OnValidate()
         {
-            _spriteRenderer = transform.Find("CardImage").GetComponent<SpriteRenderer>();
-        }
+            if (_spriteRenderer == null)
+            {
+                _spriteRenderer = transform.Find("CardImage").GetComponent<SpriteRenderer>();
+            }
 
-        if (_numberText == null)
-        {
-            _numberText = transform.Find("NumberText").GetComponent<TextMeshPro>();
+            if (_numberText == null)
+            {
+                _numberText = transform.Find("NumberText").GetComponent<TextMeshPro>();
+            }
         }
-    }
 #endif
+    }
+
+    public enum PlayerType
+    {
+        Human,
+        CPU,
+    }
 }
