@@ -20,7 +20,7 @@ namespace BlackAndWhite
 
         [SerializeField] private Player _player;
         [SerializeField] private Player _cpu;
-        [SerializeField] private GameObject _resultPanel;
+        [SerializeField] private ResultPanel _resultPanel;
 
         private void Start()
         {
@@ -47,22 +47,22 @@ namespace BlackAndWhite
 
         public void ShowResultPanel(string resultStr)
         {
-            _resultPanel.SetActive(true);
-            _resultPanel.GetComponentInChildren<TextMeshProUGUI>().SetText(resultStr);
+            _resultPanel.Show();
+            _resultPanel.ResultText.SetText(resultStr);
             StartCoroutine(DisablePanel());
         }
         
         public void ShowFinalResultPanel(string resultStr)
         {
-            _resultPanel.SetActive(true);
-            _resultPanel.GetComponentInChildren<TextMeshProUGUI>().SetText(resultStr);
-            StartCoroutine(DisablePanel());
+            _resultPanel.ShowFinal();
+            _resultPanel.ResultText.SetText(resultStr);
         }
+
 
         private IEnumerator DisablePanel()
         {
             yield return new WaitForSeconds(1f);
-            _resultPanel.SetActive(false);
+            _resultPanel.Hide();
         }
     }
 }

@@ -52,50 +52,63 @@ namespace BlackAndWhite
         IEnumerator Battle()
         {
             Debug.Log("Battle");
-            int player = _player.SubmittedCard.Number;
-            int CPU = _cpu.SubmittedCard.Number;
+            int playerCardNumber = _player.SubmittedCard.Number;
+            int cpuCardNumber = _cpu.SubmittedCard.Number;
 
             string resultStr;
             
-            if (player > CPU)
+            if (playerCardNumber > cpuCardNumber)
             {
                 Debug.Log("获胜");
+                yield return new WaitForSeconds(1f);
                 _player.WinPoint.Value += 1;
                 resultStr = "You Win";
             }
-            else if (player < CPU)
+            else if (playerCardNumber < cpuCardNumber)
             {
                 Debug.Log("失败");
+                yield return new WaitForSeconds(1f);
                 _cpu.WinPoint.Value += 1;
                 resultStr = "You Lose";
             }
             else
             {
                 Debug.Log("平手");
+                yield return new WaitForSeconds(1f);
                 resultStr = "Draw";
 
             }
             
-            yield return new WaitForSeconds(1f);
+            //显示结果
             _gameUI.ShowResultPanel(resultStr);
             
             _battleCount += 1;
+
+            if (_battleCount >= 5 
+                && Mathf.Abs(_player.WinPoint.Value - _cpu.WinPoint.Value)>(9-_battleCount))
+            {
+                //可以提前结束游戏   
+                _battleCount = 9;
+            }
+            
             if (_battleCount == 9)
             {
                 if (_player.WinPoint.Value > _cpu.WinPoint.Value)
                 {
-                    resultStr = "Draw";
+                    resultStr = "You Win";
+
                 }
-                else if (_player.WinPoint.Value > _cpu.WinPoint.Value)
+                else if (_player.WinPoint.Value < _cpu.WinPoint.Value)
                 {
-                    
+                    resultStr = "You Lose";
+
                 }
                 else
                 {
-                    
+                    resultStr = "Draw";
                 }
                 yield return new WaitForSeconds(2f);
-                _gameUI.ShowResultPanel(resultStr);
+                _gameUI.ShowFinalResultPanel(resultStr);
             }
             else
             {
