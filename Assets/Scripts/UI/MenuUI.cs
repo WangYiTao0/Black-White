@@ -14,7 +14,7 @@ public class MenuUI : MonoBehaviour
     {
         _humanGameBtn.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("HumanGame");
+            SceneManager.LoadScene("Loading");
         });
         
         _CpuGameBtn.onClick.AddListener(() =>
