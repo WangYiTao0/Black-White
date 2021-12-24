@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +25,13 @@ namespace BlackAndWhite
 
         public void OnCreateRoom()
         {
+            //TODO 通过UI 添加 Room选项
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.IsVisible = false;
+            roomOptions.MaxPlayers = 2;
+
             //创建房间的同时也 加入了房间
-            PhotonNetwork.CreateRoom(_createInputField.text);
+            PhotonNetwork.CreateRoom(_createInputField.text,roomOptions,TypedLobby.Default);
         }
 
         public void OnJoinRoom()
